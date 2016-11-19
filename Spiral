@@ -1,0 +1,110 @@
+#include <iostream>
+#include <ctime>
+#include <cstdlib>
+using namespace std;
+
+void draw_spiral(int**, int, int, int, int*);
+
+int main()
+{
+    int n;
+    cout << "Vvedite n" << endl;
+    cin>>n;
+    if(n<1)
+        cout<<"Input error"<<endl;
+    else
+    {
+        int **a;
+        int cnt=0;
+        a=new int*[n];
+        int *b=new int[n*n];
+        for(int i=0; i<n; i++)
+            a[i]=new int [n];
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                a[i][j]=1+rand()%50;
+                b[cnt++]=a[i][j];
+                cout<<a[i][j]<<"\t";
+            }
+            cout<<endl;
+        }
+        for(int i=0; i<cnt; i++)
+        {
+            for(int j=0; j<cnt-i-1; j++)
+            {
+                if(b[j]>b[j+1])
+                {
+                    int buf=b[j];
+                    b[j]=b[j+1];
+                    b[j+1]=buf;
+                }
+            }
+        }
+        cout<<endl;
+        draw_spiral(a, 0, n, 0, b);
+        for(int i=0; i<n; i++)
+        {
+            for(int j=0; j<n; j++)
+            {
+                cout<<a[i][j]<<"\t";
+            }
+            cout<<endl;
+        }
+    }
+    return 0;
+}
+
+
+void draw_spiral(int** a, int pos, int len, int curr , int* b)
+{
+    if(len>2)
+    {
+        int i;
+        for(i=pos; i<pos+len; i++)
+        {
+            a[pos][i]=b[curr];
+            curr++;
+        }
+        for(i=pos+1; i<pos+len ; i++)
+        {
+            a[i][pos+len-1]=b[curr];
+            curr++;
+        }
+        for(i=pos+len-2; i>=pos; i--)
+        {
+            a[pos+len-1][i]=b[curr];
+            curr++;
+        }
+        for(i=pos+len-2; i>pos ; i--)
+        {
+            a[i][pos]=b[curr];
+            curr++;
+        }
+        draw_spiral(a, pos+1, len-2, curr, b);
+    }
+    else
+    {
+        if(len==1)
+            a[pos][pos]=b[curr];
+        if(len==2)
+        {
+            a[pos][pos]=b[curr];
+            a[pos][pos+1]=b[curr+1];
+            a[pos+1][pos+1]=b[curr+2];
+            a[pos+1][pos]=b[curr+3];
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
